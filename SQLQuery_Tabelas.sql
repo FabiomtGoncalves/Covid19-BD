@@ -1,0 +1,132 @@
+
+
+USE COVID19
+GO
+
+
+CREATE TABLE Paises
+(
+	cod_Pais SMALLINT PRIMARY KEY NOT NULL,
+	Pais VARCHAR(50) NOT NULL,
+	Abreviatura CHAR(3),
+	Linguagem CHAR(3),
+	Populacao INT
+)
+
+GO
+
+CREATE TABLE Regioes
+(	
+	cod_Regiao SMALLINT PRIMARY KEY NOT NULL,
+	Regiao VARCHAR(50) NOT NULL,
+	cod_Pais SMALLINT NOT NULL,
+	FOREIGN KEY (cod_Pais)
+	REFERENCES Paises(cod_Pais)
+	ON UPDATE CASCADE
+	ON DELETE CASCADE
+)
+
+GO
+
+
+CREATE TABLE Concelhos
+(
+	cod_Concelho SMALLINT PRIMARY KEY NOT NULL,
+	Concelho VARCHAR(50) NOT NULL,
+	Abreviatura CHAR(3)
+)
+
+GO
+
+
+CREATE TABLE Cidades
+(
+	cod_Cidade SMALLINT PRIMARY KEY NOT NULL,
+	cod_Regiao SMALLINT NOT NULL,
+	FOREIGN KEY (cod_Regiao)
+	REFERENCES Regioes(cod_Regiao)
+	ON UPDATE CASCADE
+	ON DELETE CASCADE,
+	cod_Concelho SMALLINT,
+	FOREIGN KEY (cod_Concelho)
+	REFERENCES Concelhos(cod_Concelho)
+	ON UPDATE CASCADE
+	ON DELETE CASCADE,
+	Cidade VARCHAR(100) NOT NULL,
+)
+
+GO
+
+
+
+CREATE TABLE Estado
+(
+	cod_Estado SMALLINT PRIMARY KEY NOT NULL,
+	Designacao VARCHAR(10) NOT NULL
+)
+
+GO
+
+CREATE TABLE Grupo_etario
+(
+	cod_GE SMALLINT PRIMARY KEY NOT NULL,
+	GrupoEtario VARCHAR(5) NOT NULL
+)
+
+GO
+
+CREATE TABLE Pessoas
+(
+	cod_Pessoa SMALLINT PRIMARY KEY NOT NULL,
+	cod_Estado SMALLINT NOT NULL,
+	FOREIGN KEY (cod_Estado)
+	REFERENCES Estado(cod_Estado)
+	ON UPDATE CASCADE
+	ON DELETE CASCADE,
+	Nome VARCHAR(100) NOT NULL,
+	cod_Cidade SMALLINT NOT NULL,
+	FOREIGN KEY (cod_Cidade)
+	REFERENCES Cidades(cod_Cidade)
+	ON UPDATE CASCADE
+	ON DELETE CASCADE,
+	Nr_testes SMALLINT NOT NULL,
+	Sexo VARCHAR(1) NOT NULL,
+	Idade SMALLINT NOT NULL,
+	cod_GE SMALLINT NOT NULL,
+	FOREIGN KEY (cod_GE)
+	REFERENCES Grupo_etario(cod_GE)
+	ON UPDATE CASCADE
+	ON DELETE CASCADE,
+	Morada VARCHAR(50) NOT NULL,
+	NIF VARCHAR(30) NOT NULL,
+	Telefone VARCHAR(30) NOT NULL,
+	Email VARCHAR(50) NOT NULL,
+	Data_mod DATETIME
+)
+
+GO
+
+
+CREATE TABLE Dados24h
+(
+	cod_Dados SMALLINT PRIMARY KEY NOT NULL,
+	Ativos INT,
+	Recuperados INT,
+	Obitos INT,
+	Confirmados INT,
+	Total_testes INT
+)
+
+GO
+
+CREATE TABLE DadosTotal
+(
+	cod_Dados SMALLINT PRIMARY KEY NOT NULL,
+	Ativos INT,
+	Recuperados INT,
+	Obitos INT,
+	Confirmados INT,
+	Total_testes INT
+)
+
+GO
